@@ -20,17 +20,41 @@ from typing import List, Optional
 from ...tokenization_utils_base import BatchEncoding
 from ...utils import logging
 from .configuration_rag import RagConfig
-#elephant
+from ...tokenization_utils import PreTrainedTokenizer  #elephant
 
 logger = logging.get_logger(__name__)
 
 
-class RagTokenizer: #elephant
+class RagTokenizer(PreTrainedTokenizer): #elephant
     def __init__(self, question_encoder, generator):
         self.question_encoder = question_encoder
         self.generator = generator
         self.current_tokenizer = self.question_encoder
-        #elephant
+        eos_token="</s>"  #elephant
+        unk_token="<unk>"
+        pad_token="[PAD]"#self.current_tokenizer.pad_token_id
+        extra_ids=100
+        additional_special_tokens=None
+        
+        super().__init__(
+            eos_token=eos_token,
+            unk_token=unk_token,
+            pad_token=pad_token,
+            extra_ids=extra_ids,
+            additional_special_tokens=additional_special_tokens,
+            #sp_model_kwargs=self.sp_model_kwargs,
+            #**kwargs,
+        )
+        
+    def _convert_token_to_id(self, token):
+        """Converts a token (str) in an id using the vocab."""
+        with open("vocab.txt", encoding="utf-8") as vocab_handle:
+            self.encoder=vocab_handle.readlines()
+        for i in range(len(self.encoder)):
+            self.encoder[i]=self.encoder[i].strip()
+        if token in self.encoder:
+            return self.encoder.index(token)
+        return self.encoder.index(self.unk_token) 
 
     def save_pretrained(self, save_directory):
         if os.path.isfile(save_directory):
@@ -80,7 +104,7 @@ class RagTokenizer: #elephant
         tgt_texts: Optional[List[str]] = None,
         max_length: Optional[int] = None,
         max_target_length: Optional[int] = None,
-        padding: str = "longest", #elephant
+        padding: str = False, #elephant
         return_tensors: str = None,
         truncation: bool = True,
         **kwargs,
@@ -94,16 +118,16 @@ class RagTokenizer: #elephant
         )
         if max_length is None:
             max_length = self.current_tokenizer.model_max_length
-        #elephant
-        model_inputs = self(
-            src_texts,
-            add_special_tokens=True,
-            return_tensors=return_tensors,
-            max_length=max_length,
-            padding=padding,
-            truncation=truncation,
-            **kwargs,
-        )
+         if src_texts is not None:  #elephant
+            model_inputs = self(
+                src_texts,
+                add_special_tokens=True,
+                return_tensors=return_tensors,
+                max_length=max_length,
+                padding=padding,
+                truncation=truncation,
+                **kwargs,
+            )
         if tgt_texts is None:
             return model_inputs
         # Process tgt_texts
@@ -118,5 +142,5 @@ class RagTokenizer: #elephant
             truncation=truncation,
             **kwargs,
         )
-        model_inputs["labels"] = labels["input_ids"] #elephant
-        return model_inputs #elephant
+        #elephant
+        return labels #elephant

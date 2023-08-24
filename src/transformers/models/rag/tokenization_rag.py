@@ -30,7 +30,7 @@ class RagTokenizer: #elephant
         self.question_encoder = question_encoder
         self.generator = generator
         self.current_tokenizer = self.question_encoder
-        #elephanr
+        #elephant
 
     def save_pretrained(self, save_directory):
         if os.path.isfile(save_directory):

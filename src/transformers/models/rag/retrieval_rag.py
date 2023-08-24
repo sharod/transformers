@@ -422,6 +422,7 @@ class RagRetriever:
         rag_tokenizer = RagTokenizer.from_pretrained(retriever_name_or_path, config=config)
         question_encoder_tokenizer = rag_tokenizer.question_encoder
         generator_tokenizer = rag_tokenizer.generator
+        #elephant
         if indexed_dataset is not None:
             config.index_name = "custom"
             index = CustomHFIndex(config.retrieval_vector_size, indexed_dataset)

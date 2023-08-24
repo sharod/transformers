@@ -1317,7 +1317,7 @@ class RagTokenForGeneration(RagPreTrainedModel):
 
         if labels is not None:
             if decoder_input_ids is None:
-                decoder_input_ids = labels
+                decoder_input_ids = labels #elephant
             use_cache = False
 
         outputs = self.rag(
@@ -1346,10 +1346,10 @@ class RagTokenForGeneration(RagPreTrainedModel):
                 outputs.doc_scores,
                 labels,
                 reduce_loss=reduce_loss,
-                epsilon=self.config.label_smoothing,
+                epsilon=self.config.label_smoothing, #elephant
                 n_docs=n_docs,
             )
-
+        #elephant
         if do_marginalize:
             logits = self.marginalize(logits, outputs.doc_scores, n_docs)
 
@@ -1598,6 +1598,7 @@ class RagTokenForGeneration(RagPreTrainedModel):
 
     def get_nll(self, seq_logits, doc_scores, target, reduce_loss=False, epsilon=0.0, n_docs=None):
         n_docs = n_docs if n_docs is not None else self.config.n_docs
+        #elephant
         # shift tokens left
         target = torch.cat(
             [target[:, 1:], target.new(target.shape[0], 1).fill_(self.config.generator.pad_token_id)], 1

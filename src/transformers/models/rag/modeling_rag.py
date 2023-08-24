@@ -1345,7 +1345,7 @@ class RagTokenForGeneration(RagPreTrainedModel):
                 outputs.logits,
                 outputs.doc_scores,
                 labels,
-                reduce_loss=reduce_loss,
+                reduce_loss=reduce_loss,#elephant
                 epsilon=self.config.label_smoothing, #elephant
                 n_docs=n_docs,
             )

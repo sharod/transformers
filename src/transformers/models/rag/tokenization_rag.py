@@ -25,11 +25,12 @@ from .configuration_rag import RagConfig
 logger = logging.get_logger(__name__)
 
 
-class RagTokenizer:
+class RagTokenizer: #elephant
     def __init__(self, question_encoder, generator):
         self.question_encoder = question_encoder
         self.generator = generator
         self.current_tokenizer = self.question_encoder
+        #elephanr
 
     def save_pretrained(self, save_directory):
         if os.path.isfile(save_directory):
@@ -79,7 +80,7 @@ class RagTokenizer:
         tgt_texts: Optional[List[str]] = None,
         max_length: Optional[int] = None,
         max_target_length: Optional[int] = None,
-        padding: str = "longest",
+        padding: str = "longest", #elephant
         return_tensors: str = None,
         truncation: bool = True,
         **kwargs,
@@ -93,6 +94,7 @@ class RagTokenizer:
         )
         if max_length is None:
             max_length = self.current_tokenizer.model_max_length
+        #elephant
         model_inputs = self(
             src_texts,
             add_special_tokens=True,
@@ -116,5 +118,5 @@ class RagTokenizer:
             truncation=truncation,
             **kwargs,
         )
-        model_inputs["labels"] = labels["input_ids"]
-        return model_inputs
+        model_inputs["labels"] = labels["input_ids"] #elephant
+        return model_inputs #elephant

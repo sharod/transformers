@@ -30,14 +30,13 @@ class RagTokenizer(PreTrainedTokenizer): #elephant
         self.question_encoder = question_encoder
         self.generator = generator
         self.current_tokenizer = self.question_encoder
-        eos_token="</s>"  #elephant
-        unk_token="<unk>"
-        pad_token="[PAD]"#self.current_tokenizer.pad_token_id
+        #elephant
+        unk_token="[UNK]"
+        pad_token="[PAD]"
         extra_ids=100
         additional_special_tokens=None
         
         super().__init__(
-            eos_token=eos_token,
             unk_token=unk_token,
             pad_token=pad_token,
             extra_ids=extra_ids,
